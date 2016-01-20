@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EmptyProject;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace EmptyProject.Tests
 {
-    [TestFixture]
+    [TestFixture(TestOf = (typeof(Ability)))]
     public class AbilityTests
     {
+        [Test]
+        public void AbilityIsImplicitySetFromInteger()
+        {
+            Ability a = 10;
+            Assert.That(a.Score, Is.EqualTo(10));
+        }
+
         [TestCase(1, -5)]
         [TestCase(2, -4)]
         [TestCase(3, -4)]
@@ -32,11 +34,9 @@ namespace EmptyProject.Tests
         [TestCase(20, 5)]
         public void AbilityModifierIsBasedOffOfScore(int score, int expectedHp)
         {
-            var enemy = new Ability();
+            Ability ability = score;
 
-            enemy.SetScore(score);
-
-            Assert.That(enemy.Modifier, Is.EqualTo(expectedHp));
+            Assert.That(ability.Modifier, Is.EqualTo(expectedHp));
         }
     }
 }

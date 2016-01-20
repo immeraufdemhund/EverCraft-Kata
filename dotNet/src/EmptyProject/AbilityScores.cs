@@ -2,14 +2,12 @@
 {
     public class AbilityScores
     {
-        public int Strength { get; private set; }
-        public int Dexterity { get; private set; }
-        public int Constitution { get; private set; }
-        public int Wisdom { get; private set; }
-        public int Intelligence { get; private set; }
-        public int Charisma { get; private set; }
-
-        private Ability strength, dexerity, constitution, wisdom, intelligence, charsima;
+        public Ability Strength { get; set; }
+        public Ability Dexterity { get; set; }
+        public Ability Constitution { get; set; }
+        public Ability Wisdom { get; set; }
+        public Ability Intelligence { get; set; }
+        public Ability Charisma { get; set; }
 
         public AbilityScores()
         {

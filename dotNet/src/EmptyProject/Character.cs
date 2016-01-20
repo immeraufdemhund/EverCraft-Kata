@@ -24,14 +24,27 @@ namespace EmptyProject
             Abilities = new AbilityScores();
         }
 
-        public void AcceptAttack(int hitRoll)
+        public bool Attack(Character enemy, int hitRoll)
         {
-            var damage = 0;
-            if (hitRoll >= ArmorClass)
-                damage++;
-            if (hitRoll == 20)
+            var damage = 1;
+            var isCritHit = hitRoll == 20;
+            var modifier = Abilities.Strength.Modifier;
+            hitRoll += modifier;
+            var isHit = hitRoll >= ArmorClass;
+            if (isHit)
+                damage += modifier;
+
+            if (isCritHit)
                 damage = damage * 2;
 
+            if (isHit)
+                enemy.TakeDamage(damage);
+
+            return isHit;
+        }
+
+        private void TakeDamage(int damage)
+        {
             HitPoints -= damage;
         }
     }
