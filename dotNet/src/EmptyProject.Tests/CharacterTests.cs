@@ -61,5 +61,66 @@ namespace EmptyProject.Tests
             Assert.That(_enemy.HitPoints, Is.EqualTo(-1));
             Assert.That(_enemy.IsDead);
         }
+
+        [Test]
+        public void WhenASuccessfulAttackOccursTheCharacterGains10Xp()
+        {
+            Assert.That(_hero.ExperiencePoints, Is.EqualTo(0));
+            Assert.That(_hero.Attack(_enemy, _enemy.ArmorClass - 1), Is.False);
+
+            Assert.That(_hero.ExperiencePoints, Is.EqualTo(0));
+            Assert.That(_hero.Attack(_enemy, _enemy.ArmorClass), Is.True);
+
+            Assert.That(_hero.ExperiencePoints, Is.EqualTo(10));
+        }
+
+        [Test]
+        public void CharacterDefaultLevelIsOne()
+        {
+            Assert.That(_hero.Level, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void WhenCharacterExperianceGains1000XpCharacterGainsLevel()
+        {
+            LevelHeroUpTo(2);
+
+            Assert.That(_hero.ExperiencePoints, Is.GreaterThanOrEqualTo(1000));
+            Assert.That(_hero.Level, Is.EqualTo(2));
+
+            LevelHeroUpTo(3);
+
+            Assert.That(_hero.ExperiencePoints, Is.GreaterThanOrEqualTo(2000));
+            Assert.That(_hero.Level, Is.EqualTo(3));
+        }
+
+        private void LevelHeroUpTo(int desiredLevel)
+        {
+            var deadHorse = new Character();
+            while (_hero.ExperiencePoints < (desiredLevel - 1) * 1000)
+                _hero.Attack(deadHorse, deadHorse.ArmorClass);
+        }
+
+        [Test]
+        public void WhenCharacterLevelsUpStatsIncrease()
+        {
+            _hero.SetConstitution(14);
+            var currentHp = _hero.HitPoints;
+
+            var deadHorse = new Character();
+            while (_hero.ExperiencePoints < 1000)
+                _hero.Attack(deadHorse, deadHorse.ArmorClass);
+
+            Assert.That(_hero.HitPoints, Is.EqualTo(currentHp + 5 + _hero.Constitution.Modifier));
+        }
+
+        [Test]
+        public void OneIsAddedToAttackRollForEveryEvenLevelAcheived()
+        {
+            LevelHeroUpTo(2);
+
+            Assert.That(_hero.Strength.Modifier, Is.EqualTo(0));
+            Assert.That(_hero.Attack(_enemy, _enemy.ArmorClass - 1), Is.True);
+        }
     }
 }
